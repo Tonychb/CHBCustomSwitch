@@ -15,7 +15,7 @@
 		84ED8EDE1B73BDDC007F99F7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84ED8EDC1B73BDDC007F99F7 /* LaunchScreen.storyboard */; };
 		84ED8EE91B73BDDC007F99F7 /* CHBCustomSwitchDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84ED8EE81B73BDDC007F99F7 /* CHBCustomSwitchDemoTests.m */; };
 		84ED8EF41B73BDDC007F99F7 /* CHBCustomSwitchDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84ED8EF31B73BDDC007F99F7 /* CHBCustomSwitchDemoUITests.m */; };
-		84ED8F031B73BE16007F99F7 /* CustomSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 84ED8F021B73BE16007F99F7 /* CustomSwitch.m */; };
+		E55E217E1B74546100EBAAE8 /* CustomSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = E55E217D1B74546100EBAAE8 /* CustomSwitch.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,8 +52,8 @@
 		84ED8EEF1B73BDDC007F99F7 /* CHBCustomSwitchDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CHBCustomSwitchDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		84ED8EF31B73BDDC007F99F7 /* CHBCustomSwitchDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CHBCustomSwitchDemoUITests.m; sourceTree = "<group>"; };
 		84ED8EF51B73BDDC007F99F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84ED8F011B73BE16007F99F7 /* CustomSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomSwitch.h; sourceTree = "<group>"; };
-		84ED8F021B73BE16007F99F7 /* CustomSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomSwitch.m; sourceTree = "<group>"; };
+		E55E217C1B74546100EBAAE8 /* CustomSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomSwitch.h; sourceTree = "<group>"; };
+		E55E217D1B74546100EBAAE8 /* CustomSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomSwitch.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,8 +108,8 @@
 				84ED8ED21B73BDDC007F99F7 /* AppDelegate.m */,
 				84ED8ED41B73BDDC007F99F7 /* ViewController.h */,
 				84ED8ED51B73BDDC007F99F7 /* ViewController.m */,
-				84ED8F011B73BE16007F99F7 /* CustomSwitch.h */,
-				84ED8F021B73BE16007F99F7 /* CustomSwitch.m */,
+				E55E217C1B74546100EBAAE8 /* CustomSwitch.h */,
+				E55E217D1B74546100EBAAE8 /* CustomSwitch.m */,
 				84ED8ED71B73BDDC007F99F7 /* Main.storyboard */,
 				84ED8EDA1B73BDDC007F99F7 /* Assets.xcassets */,
 				84ED8EDC1B73BDDC007F99F7 /* LaunchScreen.storyboard */,
@@ -277,7 +277,7 @@
 			files = (
 				84ED8ED61B73BDDC007F99F7 /* ViewController.m in Sources */,
 				84ED8ED31B73BDDC007F99F7 /* AppDelegate.m in Sources */,
-				84ED8F031B73BE16007F99F7 /* CustomSwitch.m in Sources */,
+				E55E217E1B74546100EBAAE8 /* CustomSwitch.m in Sources */,
 				84ED8ED01B73BDDC007F99F7 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -502,6 +502,7 @@
 				84ED8EFA1B73BDDC007F99F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		84ED8EFB1B73BDDC007F99F7 /* Build configuration list for PBXNativeTarget "CHBCustomSwitchDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -510,6 +511,7 @@
 				84ED8EFD1B73BDDC007F99F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		84ED8EFE1B73BDDC007F99F7 /* Build configuration list for PBXNativeTarget "CHBCustomSwitchDemoUITests" */ = {
 			isa = XCConfigurationList;
@@ -518,6 +520,7 @@
 				84ED8F001B73BDDC007F99F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
