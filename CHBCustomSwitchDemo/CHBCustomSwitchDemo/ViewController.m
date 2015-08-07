@@ -21,9 +21,21 @@
     
     CustomSwitch *customSwitch = [[CustomSwitch alloc]initWithFrame:CGRectMake(150, 200, 100, 40)];
     customSwitch.center = self.view.center;
+    customSwitch.backgroundColor = [UIColor yellowColor];
+    [customSwitch addTarget:self action:@selector(customSwitch:)];
     [self.view addSubview:customSwitch];
+    
+    UISwitch *systemSwitch = [[UISwitch alloc]initWithFrame:CGRectMake(CGRectGetMinX(customSwitch.frame), CGRectGetMaxY(customSwitch.frame) + 20, CGRectGetWidth(customSwitch.frame), CGRectGetHeight(customSwitch.frame))];
+    //systemSwitch.backgroundColor = [UIColor orangeColor];
+    [self.view addSubview:systemSwitch];
 
     
+}
+
+- (void)customSwitch:(id)sender {
+
+    NSLog(@"自定义点击!");
+    NSLog(@"%@",sender);
 }
 
 - (void)didReceiveMemoryWarning {
