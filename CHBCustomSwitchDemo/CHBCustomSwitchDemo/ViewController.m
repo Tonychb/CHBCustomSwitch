@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "CustomSwitch.h"
+
 
 @interface ViewController ()
 
@@ -19,23 +19,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    CustomSwitch *customSwitch = [[CustomSwitch alloc]initWithFrame:CGRectMake(150, 200, 100, 40)];
-    customSwitch.center = self.view.center;
-    customSwitch.backgroundColor = [UIColor yellowColor];
-    [customSwitch addTarget:self action:@selector(customSwitch:)];
-    [self.view addSubview:customSwitch];
-    
-    UISwitch *systemSwitch = [[UISwitch alloc]initWithFrame:CGRectMake(CGRectGetMinX(customSwitch.frame), CGRectGetMaxY(customSwitch.frame) + 20, CGRectGetWidth(customSwitch.frame), CGRectGetHeight(customSwitch.frame))];
-    //systemSwitch.backgroundColor = [UIColor orangeColor];
+
+    //UISwitch
+    UISwitch *systemSwitch = [[UISwitch alloc]init];
+    systemSwitch.center = self.view.center;
     [self.view addSubview:systemSwitch];
-
     
-}
-
-- (void)customSwitch:(id)sender {
-
-    NSLog(@"自定义点击!");
-    NSLog(@"%@",sender);
 }
 
 - (void)didReceiveMemoryWarning {
