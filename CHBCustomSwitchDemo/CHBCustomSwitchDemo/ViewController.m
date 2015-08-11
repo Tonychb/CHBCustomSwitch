@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "CHBSwitch.h"
 
 
 @interface ViewController ()
@@ -19,6 +20,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    
+    CHBSwitch *chbSwitch = [[CHBSwitch alloc]initWithFrame:CGRectMake(100, 100, 60, 30)];
+    [self.view addSubview:chbSwitch];
 
     //UISwitch
     UISwitch *systemSwitch = [[UISwitch alloc]init];
