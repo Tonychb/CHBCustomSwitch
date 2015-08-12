@@ -21,14 +21,36 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     
-    CHBSwitch *chbSwitch = [[CHBSwitch alloc]initWithFrame:CGRectMake(100, 100, 60, 30)];
+    CHBSwitch *chbSwitch = [[CHBSwitch alloc]initWithFrame:CGRectMake(100, 100, 65, 30)];
+    [chbSwitch addTarget:self action:@selector(chbSwitchAction:) forControlEvents:UIControlEventValueChanged];
+    chbSwitch.on = YES;
     [self.view addSubview:chbSwitch];
-
+    
     //UISwitch
     UISwitch *systemSwitch = [[UISwitch alloc]init];
     systemSwitch.center = self.view.center;
+    [systemSwitch addTarget:self action:@selector(systemSwitchAction:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:systemSwitch];
     
+}
+
+- (void)chbSwitchAction:(CHBSwitch *)sender {
+
+    if (sender.isOn) {
+        NSLog(@"开启");
+    }else {
+        NSLog(@"关闭");
+    }
+}
+
+- (void)systemSwitchAction:(UISwitch *)sender {
+    
+    if (sender.isOn) {
+        NSLog(@"systemSwitch开启");
+    }else {
+        NSLog(@"systemSwitch关闭");
+    }
+
 }
 
 - (void)didReceiveMemoryWarning {
