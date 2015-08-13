@@ -14,7 +14,7 @@ static const CGFloat kInterval = 1.5f;
 
 
 
-@interface CHBSwitch ()<UIGestureRecognizerDelegate>
+@interface CHBSwitch ()
 
 @property (nonatomic, strong) UIView *backgroundView;
 
@@ -136,11 +136,6 @@ static const CGFloat kInterval = 1.5f;
     [self addSubview:self.thumbView];
     [self bringSubviewToFront:self.thumbView];
     
-    //******************添加手势*************************
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(disposeThumbViewPanGesture:)];
-    panGesture.delegate = self;
-    [self.thumbView addGestureRecognizer:panGesture];
-    
     //默认开关状态是关闭的
     self.on = NO;
     
@@ -154,21 +149,48 @@ static const CGFloat kInterval = 1.5f;
     }
     
     
-    
+    __weak __typeof(self) weakSelf = self;
     //判断是否需要动画操作
     if (animated) {
         
+        CGFloat animateDuration = self.frame.size.width / 100;
         if (on) {//开启操作
-            self.thumbView.center = CGPointMake(self.frame.size.width - _thumbViewCenterXY, self.frame.size.height - _thumbViewCenterXY);
+            
             self.backgroundView.backgroundColor = RGBAColor(0, 220, 0, 1);
             self.backgroundView.layer.borderColor = RGBAColor(0, 220, 0, 1).CGColor;
             self.onInsideImageView.hidden = YES;
             self.offInsideImageView.hidden = YES;
             
+            /*创建弹性动画
+             damping:阻尼，范围0-1，阻尼越接近于0，弹性效果越明显
+             velocity:弹性复位的速度
+             */
+            [UIView animateWithDuration:animateDuration delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:0.7 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                strongSelf.thumbView.center = CGPointMake(self.frame.size.width - _thumbViewCenterXY, self.frame.size.height - _thumbViewCenterXY);
+                
+            } completion:^(BOOL finished) {
+                
+            }];
+            
         } else {//关闭操作
-            self.thumbView.center = CGPointMake(_thumbViewCenterXY, _thumbViewCenterXY);
+            
             self.backgroundView.backgroundColor = [UIColor whiteColor];
             self.backgroundView.layer.borderColor = RGBAColor(225, 225, 225, 1).CGColor;
+            
+            /*创建弹性动画
+             damping:阻尼，范围0-1，阻尼越接近于0，弹性效果越明显
+             velocity:弹性复位的速度
+             */
+            [UIView animateWithDuration:animateDuration delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:0.7 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                strongSelf.thumbView.center = CGPointMake(_thumbViewCenterXY, _thumbViewCenterXY);
+                
+            } completion:^(BOOL finished) {
+                
+            }];
             
             //************offInsideImageView放大到显示**************
             self.offInsideImageView.hidden = NO;
@@ -204,24 +226,6 @@ static const CGFloat kInterval = 1.5f;
             self.backgroundView.backgroundColor = [UIColor whiteColor];
             self.backgroundView.layer.borderColor = RGBAColor(225, 225, 225, 1).CGColor;
             
-            //************offInsideImageView放大到显示**************
-            self.offInsideImageView.hidden = NO;
-            self.onInsideImageView.hidden = NO;
-            // 设定为缩放
-            CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-            // 动画选项设定
-            animation.duration = 0.2; // 动画持续时间
-            animation.repeatCount = 1; // 重复次数
-            animation.autoreverses = NO; // 动画结束时执行逆动画
-            // 缩放倍数
-            animation.fromValue = [NSNumber numberWithFloat:0.0]; // 开始时的倍率
-            animation.toValue = [NSNumber numberWithFloat:1.0]; // 结束时的倍率
-            // 动画终了后不返回初始状态
-            animation.removedOnCompletion = NO;
-            animation.fillMode = kCAFillModeForwards;
-            // 添加动画
-            [self.offInsideImageView.layer addAnimation:animation forKey:@"offInsideImageViewLayer"];
-            
         }
         
     }
@@ -231,12 +235,6 @@ static const CGFloat kInterval = 1.5f;
 
 
 #pragma mark - Event Response 事件响应
-#pragma mark 手势响应
-- (void)disposeThumbViewPanGesture:(UIPanGestureRecognizer *)pan {
-
-    
-}
-
 #pragma mark 触摸响应事件
 #pragma mark (一根或多根手指开始触摸屏幕时执行)
 - (void)touchesBegan:(nonnull NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
@@ -248,9 +246,9 @@ static const CGFloat kInterval = 1.5f;
     //    NSLog(@"event-->:%@",event);
     
     //获取在self上的位置
-    _beganLocation = [[touches anyObject] locationInView:self];
-    NSLog(@"beganLocation-->:%@",NSStringFromCGPoint(_beganLocation));
-
+    //    _beganLocation = [[touches anyObject] locationInView:self];
+    //    NSLog(@"beganLocation-->:%@",NSStringFromCGPoint(_beganLocation));
+    
     
     
     if (!self.isOn) {
@@ -282,11 +280,11 @@ static const CGFloat kInterval = 1.5f;
     
     NSLog(@"触摸移动！");
     
-    CGPoint currentLocation = [[touches anyObject] locationInView:self];
-    //移动偏移量
-    CGPoint moveOffset = CGPointMake(_beganLocation.x - currentLocation.x, _beganLocation.y - currentLocation.y);
-    //向左移动X坐标为正数，向右移动X坐标为负数,向上移动Y坐标为正数，向下移动Y坐标为负数
-    NSLog(@"moveOffset-->%@",NSStringFromCGPoint(moveOffset));
+    //    CGPoint currentLocation = [[touches anyObject] locationInView:self];
+    //    //移动偏移量
+    //    CGPoint moveOffset = CGPointMake(_beganLocation.x - currentLocation.x, _beganLocation.y - currentLocation.y);
+    //    //向左移动X坐标为正数，向右移动X坐标为负数,向上移动Y坐标为正数，向下移动Y坐标为负数
+    //    NSLog(@"moveOffset-->%@",NSStringFromCGPoint(moveOffset));
     
     
     
@@ -302,7 +300,7 @@ static const CGFloat kInterval = 1.5f;
         [self setOn:YES animated:YES];
         
     }
-
+    
 }
 
 #pragma mark --触摸意外取消时执行(例如正在触摸时打入电话)
