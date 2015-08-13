@@ -23,8 +23,13 @@
     
     CHBSwitch *chbSwitch = [[CHBSwitch alloc]initWithFrame:CGRectMake(100, 100, 65, 30)];
     [chbSwitch addTarget:self action:@selector(chbSwitchAction:) forControlEvents:UIControlEventValueChanged];
-    chbSwitch.on = YES;
     [self.view addSubview:chbSwitch];
+    
+    if (chbSwitch.isOn) {
+        NSLog(@"开启");
+    }else {
+        NSLog(@"关闭");
+    }
     
     //UISwitch
     UISwitch *systemSwitch = [[UISwitch alloc]init];
