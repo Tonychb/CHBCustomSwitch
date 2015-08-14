@@ -148,12 +148,10 @@ static const CGFloat kInterval = 1.5f;
         _on = on;
     }
     
-    
-    __weak __typeof(self) weakSelf = self;
     //判断是否需要动画操作
     if (animated) {
         
-        CGFloat animateDuration = self.frame.size.width / 100;
+        CGFloat animateDuration = self.frame.size.width / 300;
         if (on) {//开启操作
             
             self.backgroundView.backgroundColor = RGBAColor(0, 220, 0, 1);
@@ -161,54 +159,61 @@ static const CGFloat kInterval = 1.5f;
             self.onInsideImageView.hidden = YES;
             self.offInsideImageView.hidden = YES;
             
-            /*创建弹性动画
-             damping:阻尼，范围0-1，阻尼越接近于0，弹性效果越明显
-             velocity:弹性复位的速度
-             */
-            [UIView animateWithDuration:animateDuration delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:0.7 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                
-                __strong __typeof(weakSelf) strongSelf = weakSelf;
-                strongSelf.thumbView.center = CGPointMake(self.frame.size.width - _thumbViewCenterXY, self.frame.size.height - _thumbViewCenterXY);
-                
-            } completion:^(BOOL finished) {
-                
-            }];
+            //******************开关按钮移动动画************************transform.translation.x
+            CGPoint fromPoint = self.thumbView.center;
+            CGPoint toPoint = CGPointMake(self.frame.size.width - _thumbViewCenterXY, self.frame.size.height - _thumbViewCenterXY);
+            //路径曲线
+            UIBezierPath *movePath = [UIBezierPath bezierPath];
+            [movePath moveToPoint:fromPoint];
+            [movePath addLineToPoint:toPoint];
+            //关键帧
+            CAKeyframeAnimation *thumbViewAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+            thumbViewAnimation.path = movePath.CGPath;
+            thumbViewAnimation.duration = animateDuration; // 动画持续时间
+            thumbViewAnimation.repeatCount = 1; // 重复次数
+            [self.thumbView.layer addAnimation:thumbViewAnimation forKey:@"thumbViewLayer"];
+            self.thumbView.layer.position = toPoint;
+            
             
         } else {//关闭操作
             
             self.backgroundView.backgroundColor = [UIColor whiteColor];
             self.backgroundView.layer.borderColor = RGBAColor(225, 225, 225, 1).CGColor;
-            
-            /*创建弹性动画
-             damping:阻尼，范围0-1，阻尼越接近于0，弹性效果越明显
-             velocity:弹性复位的速度
-             */
-            [UIView animateWithDuration:animateDuration delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:0.7 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                
-                __strong __typeof(weakSelf) strongSelf = weakSelf;
-                strongSelf.thumbView.center = CGPointMake(_thumbViewCenterXY, _thumbViewCenterXY);
-                
-            } completion:^(BOOL finished) {
-                
-            }];
-            
-            //************offInsideImageView放大到显示**************
             self.offInsideImageView.hidden = NO;
             self.onInsideImageView.hidden = NO;
+            
+            //******************开关按钮移动动画************************
+            CGPoint fromPoint = self.thumbView.center;
+            CGPoint toPoint = CGPointMake( _thumbViewCenterXY,  _thumbViewCenterXY);
+            //路径曲线
+            UIBezierPath *movePath = [UIBezierPath bezierPath];
+            [movePath moveToPoint:fromPoint];
+            [movePath addLineToPoint:toPoint];
+            //关键帧
+            CAKeyframeAnimation *thumbViewAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+            thumbViewAnimation.path = movePath.CGPath;
+            thumbViewAnimation.duration = animateDuration; // 动画持续时间
+            thumbViewAnimation.repeatCount = 1; // 重复次数
+            [self.thumbView.layer addAnimation:thumbViewAnimation forKey:@"thumbViewLayer"];
+            self.thumbView.layer.position = toPoint;
+            
+
+            //************offInsideImageView放大到显示**************
             // 设定为缩放
             CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
             // 动画选项设定
-            animation.duration = 0.2; // 动画持续时间
+            animation.duration = 0.3; // 动画持续时间
             animation.repeatCount = 1; // 重复次数
-            animation.autoreverses = NO; // 动画结束时执行逆动画
+            //animation.autoreverses = NO; // 动画结束时执行逆动画,默认为NO
             // 缩放倍数
             animation.fromValue = [NSNumber numberWithFloat:0.0]; // 开始时的倍率
             animation.toValue = [NSNumber numberWithFloat:1.0]; // 结束时的倍率
-            // 动画终了后不返回初始状态
-            animation.removedOnCompletion = NO;
-            animation.fillMode = kCAFillModeForwards;
+            // 动画终了后不返回初始状态,如果将已完成的动画保持在 layer 上时，会造成额外的开销，因为渲染器会去进行额外的绘画工作。
+            //animation.removedOnCompletion = NO;
+            //animation.fillMode = kCAFillModeForwards;
             // 添加动画
             [self.offInsideImageView.layer addAnimation:animation forKey:@"offInsideImageViewLayer"];
+            self.offInsideImageView.layer.frame = self.backgroundView.bounds;
             
         }
         
@@ -263,14 +268,14 @@ static const CGFloat kInterval = 1.5f;
         animation.repeatCount = 1; // 重复次数
         animation.autoreverses = NO; // 动画结束时执行逆动画
         // 缩放倍数
-        animation.fromValue = [NSNumber numberWithFloat:1.0]; // 开始时的倍率
+        //animation.fromValue = [NSNumber numberWithFloat:1.0]; // 开始时的倍率
         animation.toValue = [NSNumber numberWithFloat:0.0]; // 结束时的倍率
-        // 动画终了后不返回初始状态
+        // 动画终了后不返回初始状态,如果将已完成的动画保持在 layer 上时，会造成额外的开销，因为渲染器会去进行额外的绘画工作。
         animation.removedOnCompletion = NO;
         animation.fillMode = kCAFillModeForwards;
         // 添加动画
         [self.offInsideImageView.layer addAnimation:animation forKey:@"offInsideImageViewLayer"];
-        
+
     }
     
 }
@@ -298,7 +303,6 @@ static const CGFloat kInterval = 1.5f;
         [self setOn:NO animated:YES];
     } else {
         [self setOn:YES animated:YES];
-        
     }
     
 }
@@ -308,6 +312,8 @@ static const CGFloat kInterval = 1.5f;
     
     
 }
+
+
 
 
 
