@@ -28,16 +28,7 @@ static const CGFloat kInterval = 1.5f;
 
 @property (nonatomic, assign) CGFloat thumbViewCenterXY;
 
-
-//@property (nonatomic, strong) UIImageView *thumbImageView;
-//
-//@property (nonatomic, strong) UILabel *onInsideLabel;
-//
-//@property (nonatomic, strong) UILabel *offInsideLabel;
-//
-//@property (nonatomic, assign) BOOL switchValue;
-//
-//@property (nonatomic, assign) BOOL isAnimating;
+@property (nonatomic, assign) BOOL isThumbViewMove;
 
 @end
 
@@ -197,23 +188,6 @@ static const CGFloat kInterval = 1.5f;
             [self.thumbView.layer addAnimation:thumbViewAnimation forKey:@"thumbViewLayer"];
             self.thumbView.layer.position = toPoint;
             
-
-            //************offInsideImageView放大到显示**************
-            // 设定为缩放
-            CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-            // 动画选项设定
-            animation.duration = 0.3; // 动画持续时间
-            animation.repeatCount = 1; // 重复次数
-            //animation.autoreverses = NO; // 动画结束时执行逆动画,默认为NO
-            // 缩放倍数
-            animation.fromValue = [NSNumber numberWithFloat:0.0]; // 开始时的倍率
-            animation.toValue = [NSNumber numberWithFloat:1.0]; // 结束时的倍率
-            // 动画终了后不返回初始状态,如果将已完成的动画保持在 layer 上时，会造成额外的开销，因为渲染器会去进行额外的绘画工作。
-            //animation.removedOnCompletion = NO;
-            //animation.fillMode = kCAFillModeForwards;
-            // 添加动画
-            [self.offInsideImageView.layer addAnimation:animation forKey:@"offInsideImageViewLayer"];
-            self.offInsideImageView.layer.frame = self.backgroundView.bounds;
             
         }
         
@@ -234,8 +208,7 @@ static const CGFloat kInterval = 1.5f;
         }
         
     }
-    
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
+
 }
 
 
@@ -250,9 +223,12 @@ static const CGFloat kInterval = 1.5f;
     //
     //    NSLog(@"event-->:%@",event);
     
-    //获取在self上的位置
-    //    _beganLocation = [[touches anyObject] locationInView:self];
-    //    NSLog(@"beganLocation-->:%@",NSStringFromCGPoint(_beganLocation));
+    //获取在thumbView上的位置
+    if ([[touches anyObject] view] == self.thumbView) {
+        _beganLocation = [[touches anyObject] locationInView:self.thumbView];
+        //NSLog(@"beganLocation-->:%@",NSStringFromCGPoint(_beganLocation));
+    }
+
     
     
     
@@ -275,7 +251,7 @@ static const CGFloat kInterval = 1.5f;
         animation.fillMode = kCAFillModeForwards;
         // 添加动画
         [self.offInsideImageView.layer addAnimation:animation forKey:@"offInsideImageViewLayer"];
-
+        
     }
     
 }
@@ -283,28 +259,69 @@ static const CGFloat kInterval = 1.5f;
 #pragma mark (一根或多根手指在屏幕上移动时执行，注意此方法在移动过程中会重复调用)
 - (void)touchesMoved:(nonnull NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     
-    NSLog(@"触摸移动！");
+    //NSLog(@"触摸移动！");
     
-    //    CGPoint currentLocation = [[touches anyObject] locationInView:self];
-    //    //移动偏移量
-    //    CGPoint moveOffset = CGPointMake(_beganLocation.x - currentLocation.x, _beganLocation.y - currentLocation.y);
-    //    //向左移动X坐标为正数，向右移动X坐标为负数,向上移动Y坐标为正数，向下移动Y坐标为负数
-    //    NSLog(@"moveOffset-->%@",NSStringFromCGPoint(moveOffset));
+    _isThumbViewMove = YES;
     
+    CGPoint currentLocation = [[touches anyObject] locationInView:self.thumbView];
+    //移动偏移量
+    CGPoint moveOffset = CGPointMake(_beganLocation.x - currentLocation.x, _beganLocation.y - currentLocation.y);
+    //向左移动X坐标为正数，向右移动X坐标为负数,向上移动Y坐标为正数，向下移动Y坐标为负数
+    //NSLog(@"moveOffset-->%@",NSStringFromCGPoint(moveOffset));
     
+    if (self.isOn) {
+        
+        if (moveOffset.x > 20) {
+            [self setOn:NO animated:YES];
+        }
+        
+    } else {
+        
+        if (moveOffset.x < - 20) {
+            [self setOn:YES animated:YES];
+        }
+        
+    }
     
 }
 
 #pragma mark (一根或多根手指触摸结束离开屏幕时执行)
 - (void)touchesEnded:(nonnull NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     
-    //获取当前开关状态，判断动画要向左移动还是向右移动
-    if (self.isOn) {
-        [self setOn:NO animated:YES];
-    } else {
-        [self setOn:YES animated:YES];
+    if (!_isThumbViewMove) {
+        //获取当前开关状态，判断动画要向左移动还是向右移动
+        if (self.isOn) {
+            [self setOn:NO animated:YES];
+        } else {
+            [self setOn:YES animated:YES];
+        }
+    }else {
+    
+        _isThumbViewMove = NO;
     }
     
+    
+    if (!self.isOn) {
+        //************offInsideImageView放大到显示**************
+        // 设定为缩放
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+        // 动画选项设定
+        animation.duration = 0.3; // 动画持续时间
+        animation.repeatCount = 1; // 重复次数
+        //animation.autoreverses = NO; // 动画结束时执行逆动画,默认为NO
+        // 缩放倍数
+        animation.fromValue = [NSNumber numberWithFloat:0.0]; // 开始时的倍率
+        animation.toValue = [NSNumber numberWithFloat:1.0]; // 结束时的倍率
+        // 动画终了后不返回初始状态,如果将已完成的动画保持在 layer 上时，会造成额外的开销，因为渲染器会去进行额外的绘画工作。
+        //animation.removedOnCompletion = NO;
+        //animation.fillMode = kCAFillModeForwards;
+        // 添加动画
+        [self.offInsideImageView.layer addAnimation:animation forKey:@"offInsideImageViewLayer"];
+        self.offInsideImageView.layer.frame = self.backgroundView.bounds;
+    }
+    
+    
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
 #pragma mark --触摸意外取消时执行(例如正在触摸时打入电话)
