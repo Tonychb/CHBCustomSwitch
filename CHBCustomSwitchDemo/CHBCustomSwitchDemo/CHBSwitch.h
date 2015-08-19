@@ -10,6 +10,11 @@
 
 @interface CHBSwitch : UIControl
 
+
+@property(nonatomic, strong) UIColor *onTintColor;
+@property(nonatomic, strong) UIColor *tintColor;
+@property(nonatomic, strong) UIColor *thumbTintColor;
+
 @property(nonatomic, getter=isOn) BOOL on;
 
 - (void)setOn:(BOOL)on animated:(BOOL)animated;

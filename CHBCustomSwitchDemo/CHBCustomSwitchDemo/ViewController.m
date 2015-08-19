@@ -22,12 +22,18 @@
     
     
     CHBSwitch *chbSwitch = [[CHBSwitch alloc]initWithFrame:CGRectMake(100, 100, 50, 30)];
+    chbSwitch.tintColor = [UIColor yellowColor];
+    chbSwitch.onTintColor = [UIColor blueColor];
+    chbSwitch.thumbTintColor = [UIColor greenColor];
     [chbSwitch addTarget:self action:@selector(chbSwitchAction:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:chbSwitch];
 
     //UISwitch
     UISwitch *systemSwitch = [[UISwitch alloc]init];
     systemSwitch.center = self.view.center;
+    systemSwitch.tintColor = [UIColor yellowColor];
+    systemSwitch.onTintColor = [UIColor blueColor];
+    systemSwitch.thumbTintColor = [UIColor greenColor];
     [systemSwitch addTarget:self action:@selector(systemSwitchAction:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:systemSwitch];
     

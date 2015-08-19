@@ -73,10 +73,43 @@ static const CGFloat kInterval = 1.5f;
     
 }
 
+- (void)setOnTintColor:(UIColor *)onTintColor {
+    
+    if (_onTintColor != onTintColor) {
+        _onTintColor = onTintColor;
+    }
+    
+}
+
+- (void)setTintColor:(UIColor *)tintColor {
+    
+    if (_tintColor != tintColor) {
+        _tintColor = tintColor;
+        
+        self.backgroundView.layer.borderColor = tintColor.CGColor;
+    }
+    
+    
+}
+
+- (void)setThumbTintColor:(UIColor *)thumbTintColor {
+    
+    if (_thumbTintColor != thumbTintColor) {
+        _thumbTintColor = thumbTintColor;
+        
+        self.thumbView.backgroundColor = thumbTintColor;
+    }
+
+}
+
 #pragma mark - Private Methods 私有方法
 - (void)setupSubControl {
     
     self.backgroundColor = [UIColor clearColor];
+    
+    
+    _tintColor = 
+    _thumbTintColor = [UIColor whiteColor];
     
     //*****************背景视图*******************
     self.backgroundView = [[UIView alloc]initWithFrame:self.bounds];
@@ -110,17 +143,17 @@ static const CGFloat kInterval = 1.5f;
     self.thumbView.backgroundColor = [UIColor whiteColor];
     //圆角半径
     self.thumbView.layer.cornerRadius = thumbViewWH * 0.5;
-    self.thumbView.layer.borderColor = RGBAColor(225, 225, 225, 1).CGColor;
-    self.thumbView.layer.borderWidth = 0.5f;
-    //阴影效果
-    self.thumbView.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.thumbView.layer.shadowRadius = 1.0;
-    //阴影透明度，注意默认为0，如果设置阴影必须设置此属性
-    self.thumbView.layer.shadowOpacity = 0.3;
-    //阴影偏移量
-    self.thumbView.layer.shadowOffset = CGSizeMake(0, 2);
-    //阴影的形状
-    self.thumbView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.thumbView.bounds cornerRadius:self.thumbView.layer.cornerRadius].CGPath;
+    //    self.thumbView.layer.borderColor = [UIColor whiteColor].CGColor;;
+    //    self.thumbView.layer.borderWidth = 0.5f;
+    //    //阴影效果
+    //    self.thumbView.layer.shadowColor = [UIColor whiteColor].CGColor;
+    //    self.thumbView.layer.shadowRadius = 1.0;
+    //    //阴影透明度，注意默认为0，如果设置阴影必须设置此属性
+    //    self.thumbView.layer.shadowOpacity = 0.5;
+    //    //阴影偏移量
+    //    self.thumbView.layer.shadowOffset = CGSizeMake(0, 1);
+    //    //阴影的形状
+    //    self.thumbView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.thumbView.bounds cornerRadius:self.thumbView.layer.cornerRadius].CGPath;
     //子图层是否剪切图层边界，默认为NO
     //self.thumbView.layer.masksToBounds = YES;
     //self.thumbView.userInteractionEnabled = NO;
@@ -208,7 +241,7 @@ static const CGFloat kInterval = 1.5f;
         }
         
     }
-
+    
 }
 
 
@@ -228,7 +261,7 @@ static const CGFloat kInterval = 1.5f;
         _beganLocation = [[touches anyObject] locationInView:self.thumbView];
         //NSLog(@"beganLocation-->:%@",NSStringFromCGPoint(_beganLocation));
     }
-
+    
     
     
     
@@ -296,7 +329,7 @@ static const CGFloat kInterval = 1.5f;
             [self setOn:YES animated:YES];
         }
     }else {
-    
+        
         _isThumbViewMove = NO;
     }
     
