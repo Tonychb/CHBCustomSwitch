@@ -8,7 +8,7 @@
 
 #import "CHBSwitch.h"
 
-#define RGBAColor(R, G, B, A)   [UIColor colorWithRed:(R)/255.0 green:(G)/255.0 blue:(B)/255.0 alpha:A]
+#define RGBAColor(Red, Green, Blue, Alpha)   [UIColor colorWithRed:(Red)/255.0 green:(Green)/255.0 blue:(Blue)/255.0 alpha:Alpha]
 
 static const CGFloat kInterval = 1.5f;
 
