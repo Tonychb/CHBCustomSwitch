@@ -29,6 +29,10 @@ typedef NS_ENUM(NSUInteger, CHBSwitchStyle){
  */
 @property(nonatomic, strong) UIColor *onTintColor;
 /**
+ *  关闭时的内部背景颜色
+ */
+@property(nonatomic, strong) UIColor *offInternalBackgroundColor;
+/**
  *  整个视图的着色
  */
 @property(nonatomic, strong) UIColor *tintColor;

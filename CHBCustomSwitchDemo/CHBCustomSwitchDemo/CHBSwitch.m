@@ -116,6 +116,15 @@ static const CGFloat kInterval = 1.5f;
     }
 }
 
+- (void)setOffInternalBackgroundColor:(UIColor *)offInternalBackgroundColor {
+
+    if (_offInternalBackgroundColor != offInternalBackgroundColor) {
+        _offInternalBackgroundColor = offInternalBackgroundColor;
+        
+        self.onOrOffInsideView.backgroundColor = offInternalBackgroundColor;
+    }
+}
+
 #pragma mark - Private Methods 私有方法
 - (void)setupSubControl {
     
@@ -125,6 +134,7 @@ static const CGFloat kInterval = 1.5f;
     _onTintColor = RGBAColor(0, 220, 0, 1);
     _tintColor = RGBAColor(225, 225, 225, 1);
     _thumbTintColor = [UIColor whiteColor];
+    _offInternalBackgroundColor = [UIColor whiteColor];
     
     //*****************背景视图*******************
     self.backgroundView = [[UIView alloc]initWithFrame:self.bounds];
@@ -138,7 +148,7 @@ static const CGFloat kInterval = 1.5f;
     
     //****************开关按钮视图******************
     _thumbViewWH =  self.frame.size.height - kInterval * 2;
-    self.thumbView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _thumbViewWH, _thumbViewWH)];
+    self.thumbView = [[UIView alloc]initWithFrame:CGRectMake(0, kInterval, _thumbViewWH, _thumbViewWH)];
     _thumbViewCenterXY = kInterval + _thumbViewWH * 0.5;
     self.thumbView.backgroundColor = _thumbTintColor;
     //圆角半径
@@ -164,7 +174,7 @@ static const CGFloat kInterval = 1.5f;
     self.onOrOffInsideView = [[UIView alloc]initWithFrame:CGRectInset(self.thumbView.bounds, - (self.frame.size.width - _thumbViewCenterXY), - (self.frame.size.width - _thumbViewCenterXY))];
     self.onOrOffInsideView.center = CGPointMake(self.frame.size.width - _thumbViewCenterXY, self.frame.size.height - _thumbViewCenterXY);
     self.onOrOffInsideView.layer.cornerRadius = self.onOrOffInsideView.frame.size.width * 0.5;
-    self.onOrOffInsideView.backgroundColor = [UIColor whiteColor];
+    self.onOrOffInsideView.backgroundColor = _offInternalBackgroundColor;
     [self.backgroundView addSubview:self.onOrOffInsideView];
     
     //默认开关状态是关闭的
@@ -188,19 +198,20 @@ static const CGFloat kInterval = 1.5f;
             self.backgroundView.layer.borderColor = _onTintColor.CGColor;
             
             //******************开关按钮移动动画************************transform.translation.x
-            CGPoint fromPoint = self.thumbView.center;
-            CGPoint toPoint = CGPointMake(self.frame.size.width - _thumbViewCenterXY, self.frame.size.height - _thumbViewCenterXY);
-            //路径曲线
-            UIBezierPath *movePath = [UIBezierPath bezierPath];
-            [movePath moveToPoint:fromPoint];
-            [movePath addLineToPoint:toPoint];
-            //关键帧
-            CAKeyframeAnimation *thumbViewAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
-            thumbViewAnimation.path = movePath.CGPath;
-            thumbViewAnimation.duration = 0.2; // 动画持续时间
-            thumbViewAnimation.repeatCount = 1; // 重复次数
-            [self.thumbView.layer addAnimation:thumbViewAnimation forKey:@"thumbViewLayer"];
-            self.thumbView.layer.position = toPoint;
+//            CGPoint fromPoint = self.thumbView.center;
+//            CGPoint toPoint = CGPointMake(self.frame.size.width - _thumbViewCenterXY, self.frame.size.height - _thumbViewCenterXY);
+//            //路径曲线
+//            UIBezierPath *movePath = [UIBezierPath bezierPath];
+//            [movePath moveToPoint:fromPoint];
+//            [movePath addLineToPoint:toPoint];
+
+            CABasicAnimation *rightAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+            rightAnimation.toValue = @(self.frame.size.width - (_thumbViewWH + kInterval * 2));
+            rightAnimation.duration = 0.2; // 动画持续时间
+            rightAnimation.repeatCount = 1; // 重复次数
+            rightAnimation.removedOnCompletion = NO;
+            rightAnimation.fillMode = kCAFillModeForwards;
+            [self.thumbView.layer addAnimation:rightAnimation forKey:@"right"];
             
             
         } else {//关闭操作
@@ -208,19 +219,20 @@ static const CGFloat kInterval = 1.5f;
             self.backgroundView.layer.borderColor = _tintColor.CGColor;
             self.backgroundView.backgroundColor = _tintColor;
             //******************开关按钮移动动画************************
-            CGPoint fromPoint = self.thumbView.center;
-            CGPoint toPoint = CGPointMake( _thumbViewCenterXY,  _thumbViewCenterXY);
-            //路径曲线
-            UIBezierPath *movePath = [UIBezierPath bezierPath];
-            [movePath moveToPoint:fromPoint];
-            [movePath addLineToPoint:toPoint];
-            //关键帧
-            CAKeyframeAnimation *thumbViewAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
-            thumbViewAnimation.path = movePath.CGPath;
-            thumbViewAnimation.duration = 0.2; // 动画持续时间
-            thumbViewAnimation.repeatCount = 1; // 重复次数
-            [self.thumbView.layer addAnimation:thumbViewAnimation forKey:@"thumbViewLayer"];
-            self.thumbView.layer.position = toPoint;
+//            CGPoint fromPoint = self.thumbView.center;
+//            CGPoint toPoint = CGPointMake( _thumbViewCenterXY,  _thumbViewCenterXY);
+//            //路径曲线
+//            UIBezierPath *movePath = [UIBezierPath bezierPath];
+//            [movePath moveToPoint:fromPoint];
+//            [movePath addLineToPoint:toPoint];
+
+            CABasicAnimation *leftAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+            leftAnimation.toValue = @(0);
+            leftAnimation.duration = 0.2; // 动画持续时间
+            leftAnimation.repeatCount = 1; // 重复次数
+            leftAnimation.removedOnCompletion = NO;
+            leftAnimation.fillMode = kCAFillModeForwards;
+            [self.thumbView.layer addAnimation:leftAnimation forKey:@"left"];
             
             
         }
@@ -282,6 +294,7 @@ static const CGFloat kInterval = 1.5f;
         animation.fillMode = kCAFillModeForwards;
         // 添加动画
         [self.onOrOffInsideView.layer addAnimation:animation forKey:@"off"];
+        
     }
     
 }
@@ -334,7 +347,6 @@ static const CGFloat kInterval = 1.5f;
         
         _isMove = NO;
     }
-    
     
     if (!self.isOn) {
         //************offInsideImageView放大到显示**************

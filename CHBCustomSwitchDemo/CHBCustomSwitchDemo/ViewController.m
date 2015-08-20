@@ -19,23 +19,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    self.view.backgroundColor = [UIColor blackColor];
     
     CHBSwitch *chbSwitch = [[CHBSwitch alloc]initWithFrame:CGRectMake(100, 100, 60, 30)];
-    chbSwitch.tintColor = [UIColor yellowColor];
-    chbSwitch.onTintColor = [UIColor blueColor];
-    chbSwitch.thumbTintColor = [UIColor greenColor];
+    //chbSwitch.tintColor = [UIColor greenColor];
+    chbSwitch.onTintColor = [UIColor greenColor];
+    chbSwitch.thumbTintColor = [UIColor whiteColor];
+    chbSwitch.offInternalBackgroundColor = [UIColor lightGrayColor];
     [chbSwitch setOn:NO animated:YES];
-    //chbSwitch.switchStyle = CHBSwitchStyleCircle;
+    chbSwitch.switchStyle = CHBSwitchStyleSquare;
     [chbSwitch addTarget:self action:@selector(chbSwitchAction:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:chbSwitch];
 
     //UISwitch
     UISwitch *systemSwitch = [[UISwitch alloc]init];
     systemSwitch.center = self.view.center;
-    systemSwitch.tintColor = [UIColor yellowColor];
-    systemSwitch.onTintColor = [UIColor blueColor];
-    systemSwitch.thumbTintColor = [UIColor greenColor];
+    //systemSwitch.tintColor = [UIColor yellowColor];
+    systemSwitch.onTintColor = [UIColor greenColor];
+    systemSwitch.thumbTintColor = [UIColor whiteColor];
     [systemSwitch setOn:NO animated:YES];
     [systemSwitch addTarget:self action:@selector(systemSwitchAction:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:systemSwitch];
