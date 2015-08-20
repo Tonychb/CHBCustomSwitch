@@ -13,13 +13,13 @@
  */
 typedef NS_ENUM(NSUInteger, CHBSwitchStyle){
     /**
+     *  圆形(默认)
+     */
+    CHBSwitchStyleCircle = 1,
+    /**
      *  方形
      */
-    CHBSwitchStyleSquare,
-    /**
-     *  圆形
-     */
-    CHBSwitchStyleCircle
+    CHBSwitchStyleSquare
 };
 
 @interface CHBSwitch : UIControl
@@ -36,6 +36,8 @@ typedef NS_ENUM(NSUInteger, CHBSwitchStyle){
  *  开关按钮颜色
  */
 @property(nonatomic, strong) UIColor *thumbTintColor;
+
+@property(nonatomic, assign) CHBSwitchStyle switchStyle;
 
 @property(nonatomic, getter=isOn) BOOL on;
 

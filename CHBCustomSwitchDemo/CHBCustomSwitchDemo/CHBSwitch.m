@@ -26,9 +26,10 @@ static const CGFloat kInterval = 1.5f;
 
 @property (nonatomic, assign) CGFloat thumbViewCenterXY;
 
+@property (nonatomic, assign) CGFloat thumbViewWH;
+
 @property (nonatomic, assign) BOOL isMove;
 
-@property (nonatomic, assign) BOOL isThumbView;
 
 @end
 
@@ -105,12 +106,22 @@ static const CGFloat kInterval = 1.5f;
     
 }
 
+- (void)setSwitchStyle:(CHBSwitchStyle)switchStyle {
+
+    if (_switchStyle != switchStyle) {
+        _switchStyle = switchStyle;
+        self.backgroundView.layer.cornerRadius = (switchStyle == CHBSwitchStyleCircle) ? self.frame.size.height * 0.5 : 0.0;
+        self.onOrOffInsideView.layer.cornerRadius = (switchStyle == CHBSwitchStyleCircle) ? self.onOrOffInsideView.frame.size.width * 0.5 : 0.0;
+        self.thumbView.layer.cornerRadius = (switchStyle == CHBSwitchStyleCircle) ? _thumbViewWH * 0.5 : 0.0;
+    }
+}
+
 #pragma mark - Private Methods 私有方法
 - (void)setupSubControl {
     
     self.backgroundColor = [UIColor clearColor];
     
-    //默认颜色
+    //默认配置
     _onTintColor = RGBAColor(0, 220, 0, 1);
     _tintColor = RGBAColor(225, 225, 225, 1);
     _thumbTintColor = [UIColor whiteColor];
@@ -121,22 +132,17 @@ static const CGFloat kInterval = 1.5f;
     self.backgroundView.layer.borderColor = _tintColor.CGColor;
     self.backgroundView.layer.borderWidth = 1.5f;
     self.backgroundView.backgroundColor = _tintColor;
+    self.backgroundView.layer.masksToBounds = YES;
     [self addSubview:self.backgroundView];
     [self sendSubviewToBack:self.backgroundView];
     
-    //*****************开关内部图像视图*******************
-    self.onOrOffInsideView = [[UIView alloc]initWithFrame:self.backgroundView.bounds];
-    self.onOrOffInsideView.layer.cornerRadius = self.frame.size.height * 0.5;
-    self.onOrOffInsideView.backgroundColor = [UIColor whiteColor];
-    [self.backgroundView addSubview:self.onOrOffInsideView];
-    
     //****************开关按钮视图******************
-    CGFloat thumbViewWH =  self.frame.size.height - kInterval * 2;
-    self.thumbView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, thumbViewWH, thumbViewWH)];
-    _thumbViewCenterXY = kInterval + thumbViewWH * 0.5;
+    _thumbViewWH =  self.frame.size.height - kInterval * 2;
+    self.thumbView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _thumbViewWH, _thumbViewWH)];
+    _thumbViewCenterXY = kInterval + _thumbViewWH * 0.5;
     self.thumbView.backgroundColor = _thumbTintColor;
     //圆角半径
-    self.thumbView.layer.cornerRadius = thumbViewWH * 0.5;
+    self.thumbView.layer.cornerRadius = _thumbViewWH * 0.5;
 //    self.thumbView.layer.borderColor = _thumbTintColor.CGColor;;
 //    self.thumbView.layer.borderWidth = 0.5f;
     //阴影效果
@@ -154,6 +160,13 @@ static const CGFloat kInterval = 1.5f;
     [self addSubview:self.thumbView];
     [self bringSubviewToFront:self.thumbView];
     
+    //*****************开关内部图像视图*******************
+    self.onOrOffInsideView = [[UIView alloc]initWithFrame:CGRectInset(self.thumbView.bounds, - (self.frame.size.width - _thumbViewCenterXY), - (self.frame.size.width - _thumbViewCenterXY))];
+    self.onOrOffInsideView.center = CGPointMake(self.frame.size.width - _thumbViewCenterXY, self.frame.size.height - _thumbViewCenterXY);
+    self.onOrOffInsideView.layer.cornerRadius = self.onOrOffInsideView.frame.size.width * 0.5;
+    self.onOrOffInsideView.backgroundColor = [UIColor whiteColor];
+    [self.backgroundView addSubview:self.onOrOffInsideView];
+    
     //默认开关状态是关闭的
     self.on = NO;
     
@@ -169,9 +182,8 @@ static const CGFloat kInterval = 1.5f;
     //判断是否需要动画操作
     if (animated) {
         
-        CGFloat animateDuration = self.frame.size.width / 300;
         if (on) {//开启操作
-            self.onOrOffInsideView.hidden = YES;
+            //self.onOrOffInsideView.hidden = YES;
             self.backgroundView.backgroundColor = _onTintColor;
             self.backgroundView.layer.borderColor = _onTintColor.CGColor;
             
@@ -185,14 +197,14 @@ static const CGFloat kInterval = 1.5f;
             //关键帧
             CAKeyframeAnimation *thumbViewAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
             thumbViewAnimation.path = movePath.CGPath;
-            thumbViewAnimation.duration = animateDuration; // 动画持续时间
+            thumbViewAnimation.duration = 0.2; // 动画持续时间
             thumbViewAnimation.repeatCount = 1; // 重复次数
             [self.thumbView.layer addAnimation:thumbViewAnimation forKey:@"thumbViewLayer"];
             self.thumbView.layer.position = toPoint;
             
             
         } else {//关闭操作
-            self.onOrOffInsideView.hidden = NO;
+            //self.onOrOffInsideView.hidden = NO;
             self.backgroundView.layer.borderColor = _tintColor.CGColor;
             self.backgroundView.backgroundColor = _tintColor;
             //******************开关按钮移动动画************************
@@ -205,7 +217,7 @@ static const CGFloat kInterval = 1.5f;
             //关键帧
             CAKeyframeAnimation *thumbViewAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
             thumbViewAnimation.path = movePath.CGPath;
-            thumbViewAnimation.duration = animateDuration; // 动画持续时间
+            thumbViewAnimation.duration = 0.2; // 动画持续时间
             thumbViewAnimation.repeatCount = 1; // 重复次数
             [self.thumbView.layer addAnimation:thumbViewAnimation forKey:@"thumbViewLayer"];
             self.thumbView.layer.position = toPoint;
@@ -216,13 +228,13 @@ static const CGFloat kInterval = 1.5f;
     } else {
         
         if (on) {//开启操作
-            self.onOrOffInsideView.hidden = YES;
+            //self.onOrOffInsideView.hidden = YES;
             self.thumbView.center = CGPointMake(self.frame.size.width - _thumbViewCenterXY, self.frame.size.height - _thumbViewCenterXY);
             self.backgroundView.backgroundColor = _onTintColor;
             self.backgroundView.layer.borderColor = _onTintColor.CGColor;
             
         } else {//关闭操作
-            self.onOrOffInsideView.hidden = NO;
+            //self.onOrOffInsideView.hidden = NO;
             self.thumbView.center = CGPointMake(_thumbViewCenterXY, _thumbViewCenterXY);
             self.backgroundView.layer.borderColor = _tintColor.CGColor;
             self.backgroundView.backgroundColor = _tintColor;
@@ -245,13 +257,10 @@ static const CGFloat kInterval = 1.5f;
     //
     //    NSLog(@"event-->:%@",event);
     
-    //获取在thumbView上的位置
-    _isThumbView = ([[touches anyObject] view] == self.thumbView);
-    
-    if (_isThumbView) {
-        _beganLocation = [[touches anyObject] locationInView:self.thumbView];
-        //NSLog(@"beganLocation-->:%@",NSStringFromCGPoint(_beganLocation));
-    }
+    //获取在self上的位置
+    _beganLocation = [[touches anyObject] locationInView:self];
+    //NSLog(@"beganLocation-->:%@",NSStringFromCGPoint(_beganLocation));
+
     
     
     
@@ -262,7 +271,7 @@ static const CGFloat kInterval = 1.5f;
         // 设定为缩放
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
         // 动画选项设定
-        animation.duration = 0.3; // 动画持续时间
+        animation.duration = 0.25; // 动画持续时间
         animation.repeatCount = 1; // 重复次数
         animation.autoreverses = NO; // 动画结束时执行逆动画
         // 缩放倍数
@@ -282,11 +291,11 @@ static const CGFloat kInterval = 1.5f;
     
     //NSLog(@"触摸移动！");
     
-    _isMove = _isThumbView;
+    _isMove = YES;
     
     if (_isMove) {
         
-        CGPoint currentLocation = [[touches anyObject] locationInView:self.thumbView];
+        CGPoint currentLocation = [[touches anyObject] locationInView:self];
         //移动偏移量
         CGPoint moveOffset = CGPointMake(_beganLocation.x - currentLocation.x, _beganLocation.y - currentLocation.y);
         //向左移动X坐标为正数，向右移动X坐标为负数,向上移动Y坐标为正数，向下移动Y坐标为负数
@@ -332,7 +341,7 @@ static const CGFloat kInterval = 1.5f;
         // 设定为缩放
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
         // 动画选项设定
-        animation.duration = 0.3; // 动画持续时间
+        animation.duration = 0.35; // 动画持续时间
         animation.repeatCount = 1; // 重复次数
         //animation.autoreverses = NO; // 动画结束时执行逆动画,默认为NO
         // 缩放倍数

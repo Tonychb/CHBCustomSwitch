@@ -19,13 +19,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.view.backgroundColor = [UIColor blackColor];
     
-    
-    CHBSwitch *chbSwitch = [[CHBSwitch alloc]initWithFrame:CGRectMake(100, 100, 50, 30)];
+    CHBSwitch *chbSwitch = [[CHBSwitch alloc]initWithFrame:CGRectMake(100, 100, 60, 30)];
     chbSwitch.tintColor = [UIColor yellowColor];
     chbSwitch.onTintColor = [UIColor blueColor];
     chbSwitch.thumbTintColor = [UIColor greenColor];
     [chbSwitch setOn:NO animated:YES];
+    //chbSwitch.switchStyle = CHBSwitchStyleCircle;
     [chbSwitch addTarget:self action:@selector(chbSwitchAction:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:chbSwitch];
 
