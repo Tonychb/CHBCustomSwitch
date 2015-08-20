@@ -25,6 +25,7 @@
     chbSwitch.tintColor = [UIColor yellowColor];
     chbSwitch.onTintColor = [UIColor blueColor];
     chbSwitch.thumbTintColor = [UIColor greenColor];
+    [chbSwitch setOn:NO animated:YES];
     [chbSwitch addTarget:self action:@selector(chbSwitchAction:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:chbSwitch];
 
@@ -34,6 +35,7 @@
     systemSwitch.tintColor = [UIColor yellowColor];
     systemSwitch.onTintColor = [UIColor blueColor];
     systemSwitch.thumbTintColor = [UIColor greenColor];
+    [systemSwitch setOn:NO animated:YES];
     [systemSwitch addTarget:self action:@selector(systemSwitchAction:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:systemSwitch];
     
