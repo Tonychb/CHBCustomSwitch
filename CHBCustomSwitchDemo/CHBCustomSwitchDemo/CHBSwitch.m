@@ -237,7 +237,7 @@ static const CGFloat kInterval = 1.5f;
 #pragma mark - Event Response 事件响应
 #pragma mark 触摸响应事件
 #pragma mark (一根或多根手指开始触摸屏幕时执行)
-- (void)touchesBegan:(nonnull NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
     //    for (UITouch *touch in touches) {
     //        NSLog(@"touch-->:%@",touch);
@@ -278,7 +278,7 @@ static const CGFloat kInterval = 1.5f;
 }
 
 #pragma mark (一根或多根手指在屏幕上移动时执行，注意此方法在移动过程中会重复调用)
-- (void)touchesMoved:(nonnull NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     
     //NSLog(@"触摸移动！");
     
@@ -312,7 +312,7 @@ static const CGFloat kInterval = 1.5f;
 }
 
 #pragma mark (一根或多根手指触摸结束离开屏幕时执行)
-- (void)touchesEnded:(nonnull NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     
     if (!_isMove) {
         //获取当前开关状态，判断动画要向左移动还是向右移动
@@ -350,7 +350,7 @@ static const CGFloat kInterval = 1.5f;
 }
 
 #pragma mark --触摸意外取消时执行(例如正在触摸时打入电话)
-- (void)touchesCancelled:(nullable NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     
     
 }
