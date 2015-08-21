@@ -26,8 +26,8 @@
     chbSwitch.tintColor = [UIColor redColor];
     chbSwitch.onTintColor = [UIColor blueColor];
     chbSwitch.thumbTintColor = [UIColor greenColor];
-    chbSwitch.on = YES;
-    //[chbSwitch setOn:NO animated:YES];
+    //chbSwitch.on = NO;
+    [chbSwitch setOn:YES animated:YES];
     //chbSwitch.switchStyle = CHBSwitchStyleSquare;
     [chbSwitch addTarget:self action:@selector(chbSwitchAction:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:chbSwitch];
@@ -38,10 +38,12 @@
     systemSwitch.tintColor = [UIColor redColor];
     systemSwitch.onTintColor = [UIColor blueColor];
     systemSwitch.thumbTintColor = [UIColor clearColor];
-    systemSwitch.on = YES;
+    //systemSwitch.on = NO;
+    [systemSwitch setOn:YES animated:YES];
     [systemSwitch addTarget:self action:@selector(systemSwitchAction:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:systemSwitch];
     
+    //在控制台输入如下命令po [systemSwitch recursiveDescription];打印UIView的层级结构
 }
 
 - (void)chbSwitchAction:(CHBSwitch *)sender {

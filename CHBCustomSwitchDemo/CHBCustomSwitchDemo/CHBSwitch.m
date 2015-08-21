@@ -196,7 +196,7 @@ static const CGFloat kInterval = 1.5f;
             //self.onOrOffInsideView.hidden = YES;
             self.backgroundView.backgroundColor = _onTintColor;
             self.backgroundView.layer.borderColor = _onTintColor.CGColor;
-            
+            self.onOrOffInsideView.layer.transform = CATransform3DMakeScale(0, 0, 1);
             //******************开关按钮移动动画************************
             CGPoint fromPoint = self.thumbView.center;
             CGPoint toPoint = CGPointMake(self.frame.size.width - _thumbViewCenterXY, self.frame.size.height - _thumbViewCenterXY);
@@ -219,6 +219,7 @@ static const CGFloat kInterval = 1.5f;
             //self.onOrOffInsideView.hidden = NO;
             self.backgroundView.layer.borderColor = _tintColor.CGColor;
             self.backgroundView.backgroundColor = _tintColor;
+            self.onOrOffInsideView.layer.transform = CATransform3DMakeScale(1, 1, 1);
             //******************开关按钮移动动画************************
             CGPoint fromPoint = self.thumbView.center;
             CGPoint toPoint = CGPointMake( _thumbViewCenterXY,  _thumbViewCenterXY);
