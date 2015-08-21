@@ -197,21 +197,22 @@ static const CGFloat kInterval = 1.5f;
             self.backgroundView.backgroundColor = _onTintColor;
             self.backgroundView.layer.borderColor = _onTintColor.CGColor;
             
-            //******************开关按钮移动动画************************transform.translation.x
-//            CGPoint fromPoint = self.thumbView.center;
-//            CGPoint toPoint = CGPointMake(self.frame.size.width - _thumbViewCenterXY, self.frame.size.height - _thumbViewCenterXY);
-//            //路径曲线
-//            UIBezierPath *movePath = [UIBezierPath bezierPath];
-//            [movePath moveToPoint:fromPoint];
-//            [movePath addLineToPoint:toPoint];
+            //******************开关按钮移动动画************************
+            CGPoint fromPoint = self.thumbView.center;
+            CGPoint toPoint = CGPointMake(self.frame.size.width - _thumbViewCenterXY, self.frame.size.height - _thumbViewCenterXY);
+            //路径曲线
+            UIBezierPath *movePath = [UIBezierPath bezierPath];
+            [movePath moveToPoint:fromPoint];
+            [movePath addLineToPoint:toPoint];
 
-            CABasicAnimation *rightAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
-            rightAnimation.toValue = @(self.frame.size.width - (_thumbViewWH + kInterval * 2));
+            CAKeyframeAnimation *rightAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+            rightAnimation.path = movePath.CGPath;
             rightAnimation.duration = 0.2; // 动画持续时间
             rightAnimation.repeatCount = 1; // 重复次数
-            rightAnimation.removedOnCompletion = NO;
-            rightAnimation.fillMode = kCAFillModeForwards;
+//            rightAnimation.removedOnCompletion = NO;
+//            rightAnimation.fillMode = kCAFillModeForwards;
             [self.thumbView.layer addAnimation:rightAnimation forKey:@"right"];
+            self.thumbView.layer.position = toPoint;
             
             
         } else {//关闭操作
@@ -219,21 +220,21 @@ static const CGFloat kInterval = 1.5f;
             self.backgroundView.layer.borderColor = _tintColor.CGColor;
             self.backgroundView.backgroundColor = _tintColor;
             //******************开关按钮移动动画************************
-//            CGPoint fromPoint = self.thumbView.center;
-//            CGPoint toPoint = CGPointMake( _thumbViewCenterXY,  _thumbViewCenterXY);
-//            //路径曲线
-//            UIBezierPath *movePath = [UIBezierPath bezierPath];
-//            [movePath moveToPoint:fromPoint];
-//            [movePath addLineToPoint:toPoint];
+            CGPoint fromPoint = self.thumbView.center;
+            CGPoint toPoint = CGPointMake( _thumbViewCenterXY,  _thumbViewCenterXY);
+            //路径曲线
+            UIBezierPath *movePath = [UIBezierPath bezierPath];
+            [movePath moveToPoint:fromPoint];
+            [movePath addLineToPoint:toPoint];
 
-            CABasicAnimation *leftAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
-            leftAnimation.toValue = @(0);
+            CAKeyframeAnimation *leftAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+            leftAnimation.path = movePath.CGPath;
             leftAnimation.duration = 0.2; // 动画持续时间
             leftAnimation.repeatCount = 1; // 重复次数
-            leftAnimation.removedOnCompletion = NO;
-            leftAnimation.fillMode = kCAFillModeForwards;
+//            leftAnimation.removedOnCompletion = NO;
+//            leftAnimation.fillMode = kCAFillModeForwards;
             [self.thumbView.layer addAnimation:leftAnimation forKey:@"left"];
-            
+            self.thumbView.layer.position = toPoint;
             
         }
         
@@ -244,13 +245,14 @@ static const CGFloat kInterval = 1.5f;
             self.thumbView.center = CGPointMake(self.frame.size.width - _thumbViewCenterXY, self.frame.size.height - _thumbViewCenterXY);
             self.backgroundView.backgroundColor = _onTintColor;
             self.backgroundView.layer.borderColor = _onTintColor.CGColor;
+            self.onOrOffInsideView.layer.transform = CATransform3DMakeScale(0, 0, 1);
             
         } else {//关闭操作
             //self.onOrOffInsideView.hidden = NO;
             self.thumbView.center = CGPointMake(_thumbViewCenterXY, _thumbViewCenterXY);
             self.backgroundView.layer.borderColor = _tintColor.CGColor;
             self.backgroundView.backgroundColor = _tintColor;
-            
+            self.onOrOffInsideView.layer.transform = CATransform3DMakeScale(1, 1, 1);
         }
         
     }
